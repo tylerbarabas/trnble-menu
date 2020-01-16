@@ -1,0 +1,8 @@
+{
+  "name": "turnable-menu",
+  "description": "Customized options for Turnable.",
+  "uuid": "turnable-menu@tylerbarabas.github.com",
+  "shell-version": [
+    "3.34"
+  ]
+}
