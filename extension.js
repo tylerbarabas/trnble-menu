@@ -42,8 +42,10 @@ const TurnableMenu_Indicator = new Lang.Class({
         Main.notify('Building Turnable...', 'Take a big sip of coffee and stretch.') 
         execCommand([`${PATH}/scripts/build.sh`]).then(function (stdout){
           stdout.split('\n').map(line=>log(line))
-          Main.notify('Build finished!', 'Ready to deploy or serve.');
           this.isBuilding = false
+          let success = stdout.indexOf('success') !== -1
+          if (success) Main.notify('Build finished!', 'Ready to deploy or serve.')
+          else Main.notify('Build failed.')
         });
       } else {
         Main.notify('Can\'t start a build right now.', 'I\'m busy with another process')
@@ -57,8 +59,10 @@ const TurnableMenu_Indicator = new Lang.Class({
 
         execCommand([`${PATH}/scripts/deploy-to-staging.sh`]).then(function (stdout){
           stdout.split('\n').map(line=>log(line))
-          Main.notify('Deploy to Staging finished.', 'Go view it at https://app-dev.myturnable.com.');
           this.isDeploying = false
+          let success = stdout.indexOf('success') !== -1
+          if (success) Main.notify('Deployment to Staging successful.', 'Go view it at https://app-dev.myturnable.com')
+          else Main.notify('Deployment to Staging failed.')
         });
       } else {
         Main.notify('Can\'t deploy right now.', 'I\'m busy with another process.')
@@ -72,8 +76,10 @@ const TurnableMenu_Indicator = new Lang.Class({
 
         execCommand([`${PATH}/scripts/deploy-to-production.sh`]).then(function (stdout){
           stdout.split('\n').map(line=>log(line))
-          Main.notify('Deploy to Production finished.', 'Go view it at https://app.myturnable.com.');
           this.isDeploying = false
+          let success = stdout.indexOf('success') !== -1
+          if (success) Main.notify('Deployment to Production successful.', 'Go view it at https://app.myturnable.com')
+          else Main.notify('Deployment to Production failed.')
         });
       } else {
         Main.notify('Can\'t deploy right now.', 'I\'m busy with another process.')
