@@ -61,7 +61,7 @@ const TurnableMenu_Indicator = new Lang.Class({
           stdout.split('\n').map(line=>log(line))
           this.isDeploying = false
           let success = stdout.indexOf('success') !== -1
-          if (success) Main.notify('Deployment to Staging successful.', 'Go view it at https://app-dev.myturnable.com')
+          if (success) Main.notify('Deployment to Staging server successful!', 'Go view it at https://app-dev.myturnable.com')
           else Main.notify('Deployment to Staging failed.')
         });
       } else {
@@ -78,7 +78,7 @@ const TurnableMenu_Indicator = new Lang.Class({
           stdout.split('\n').map(line=>log(line))
           this.isDeploying = false
           let success = stdout.indexOf('success') !== -1
-          if (success) Main.notify('Deployment to Production successful.', 'Go view it at https://app.myturnable.com')
+          if (success) Main.notify('Deployment to Production server successful!', 'Go view it at https://app.myturnable.com')
           else Main.notify('Deployment to Production failed.')
         });
       } else {
