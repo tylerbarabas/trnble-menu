@@ -20,6 +20,7 @@ const TurnableMenu_Indicator = new Lang.Class({
     this.parent(0.0);
 
     this.isBuilding = false
+    this.serverIsRunning = false
 
     let button = new St.Bin({
       style_class: 'panel-button',
@@ -33,6 +34,17 @@ const TurnableMenu_Indicator = new Lang.Class({
     let icon = new St.Icon({ style_class: 'turnable-icon' });
     button.set_child(icon);
     this.actor.add_child(button);
+
+    let serverSwitch = new PopupMenu.PopupSwitchMenuItem('Dev Server');
+    serverSwitch.actor.connect('button-press-event', function(){
+      if (!this.serverIsRunning) {
+        Main.notify('Starting Turnable dev server...')
+        execCommand([`${PATH}/scripts/start-dev-server.sh`])
+      } else {
+        execCommand([`${PATH}/scripts/stop-dev-server.sh`])
+      }
+      this.serverIsRunning = !this.serverIsRunning
+    })
 
     let menuItem1 = new PopupMenu.PopupMenuItem('Build Locally');
     menuItem1.actor.connect('button-press-event', function(){
@@ -86,6 +98,7 @@ const TurnableMenu_Indicator = new Lang.Class({
       }
     });
 
+    this.menu.addMenuItem(serverSwitch);
     this.menu.addMenuItem(menuItem1);
     this.menu.addMenuItem(menuItem2);
     this.menu.addMenuItem(menuItem3);
