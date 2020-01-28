@@ -9,7 +9,6 @@ const Gio = imports.gi.Gio;
 
 const Lang = imports.lang;
 const Util = imports.misc.util;
-let loop = GLib.MainLoop.new(null, false);
 
 const PATH = '/gty/.local/share/gnome-shell/extensions/turnable-menu@tylerbarabas.github.com'
 
@@ -20,7 +19,7 @@ const TurnableMenu_Indicator = new Lang.Class({
     this.parent(0.0);
 
     this.isBuilding = false
-    this.serverIsRunning = false
+    this.serverIsRunning = this.serverIsRunning || false
 
     let button = new St.Bin({
       style_class: 'panel-button',
@@ -36,14 +35,16 @@ const TurnableMenu_Indicator = new Lang.Class({
     this.actor.add_child(button);
 
     let serverSwitch = new PopupMenu.PopupSwitchMenuItem('Dev Server');
-    serverSwitch.actor.connect('button-press-event', function(){
-      if (!this.serverIsRunning) {
-        Main.notify('Starting Turnable dev server...')
-        execCommand([`${PATH}/scripts/start-dev-server.sh`])
+    serverSwitch.actor.connect('toggled', function(e){
+      if (e._switch.state) {
+        Main.notify('Starting Turnable dev servers...')
+        execCommand([`${PATH}/scripts/start-dev-ui.sh`])
+        execCommand([`${PATH}/scripts/start-dev-service.sh`])
       } else {
-        execCommand([`${PATH}/scripts/stop-dev-server.sh`])
+        execCommand([`${PATH}/scripts/stop-dev-ui.sh`])
+        execCommand([`${PATH}/scripts/stop-dev-service.sh`])
       }
-      this.serverIsRunning = !this.serverIsRunning
+      this.serverIsRunning = e._switch.state
     })
 
     let menuItem1 = new PopupMenu.PopupMenuItem('Build Locally');
